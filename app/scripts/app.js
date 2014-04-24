@@ -15,10 +15,10 @@ angular.module('hodaApp', [
         templateUrl: 'views/characters.html',
         controller: 'CharactersCtrl',
         resolve: {
-          data: function (characterdata) {
+          data: ['characterdata', function (characterdata) {
             return characterdata.get();
             // return 'hello world';
-          }
+          }]
         }
       })
       .otherwise({
