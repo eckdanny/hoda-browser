@@ -9,6 +9,23 @@ angular.module('hodaApp')
     }
   })
 
+  .filter('speedToText', function() {
+    var map = {
+      1: 'Slow',
+      2: 'Medium',
+      3: 'Quick'
+    };
+    return function (input) {
+      var out;
+      input = input || '';
+      out = (!map[input])
+          ? ''
+          : map[input]
+          ;
+      return out;
+    };
+  })
+
   .controller('CharactersCtrl', function ($scope, data) {
 
     $scope.charactersFiltered;

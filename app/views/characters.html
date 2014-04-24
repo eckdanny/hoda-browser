@@ -140,7 +140,7 @@
 <br>
 
 <div>
-  Level: <input type="number" min="1" max="85" ng-model="level" ng-init="level=1">
+  XP: <input type="number" min="1" max="85" ng-model="xp" ng-init="xp=1">
 
   Tier:
   <label><input type="radio" ng-model="tier" value="1" ng-init="tier=1"> I</label>
@@ -170,7 +170,7 @@
       <td><input type="checkbox" ng-model="character.inList"></td>
       <td bo-bind="character.name"></td>
       <td bo-bind="character.rarity"></td>
-      <td bo-bind="character.speed"></td>
+      <td bo-text="character.speed | speedToText"></td>
       <td>
         <span class="faction faction-large"
               bo-if="character.factions.indexOf('Large') > -1"></span>
@@ -183,8 +183,8 @@
         <span class="faction faction-black"
               bo-if="character.factions.indexOf('Black') > -1"></span>
       </td>
-      <td ng-bind="getPower(level, character, tier)"></td>
-      <td ng-bind="getHealth(level, character, tier)"></td>
+      <td ng-bind="getPower(xp, character, tier)"></td>
+      <td ng-bind="getHealth(xp, character, tier)"></td>
     </tr>
   </tbody>
 </table>
