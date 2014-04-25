@@ -79,7 +79,6 @@
     width: 10px;
     vertical-align: middle;
   }
-  .faction-large { background-color: #C7BFBF; }
   .faction-red { background-color: #CC502A; }
   .faction-white { background-color: #F6F0F0; }
   .faction-blue { background-color: #399DB7; }
@@ -172,8 +171,6 @@
       <td bo-bind="character.rarity"></td>
       <td bo-text="character.speed | speedToText"></td>
       <td>
-        <span class="faction faction-large"
-              bo-if="character.factions.indexOf('Large') > -1"></span>
         <span class="faction faction-red"
               bo-if="character.factions.indexOf('Red') > -1"></span>
         <span class="faction faction-blue"
