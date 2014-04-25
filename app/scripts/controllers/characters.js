@@ -72,25 +72,26 @@ angular.module('hodaApp')
 
     $scope.getPower = function (level, character, tier) {
 
-      tier--;
+      var i = tier - 1;
 
-      level = (level > character.maxLevel[tier])
-            ? character.maxLevel[tier]
+      level = (level > character.maxLevel[i])
+            ? character.maxLevel[i]
             : level
             ;
 
-      return character.basePower[tier] + character.delPower[tier] * (level - 1);
+      return character.basePower[i] + character.delPower[i] * (level - 1);
     }
 
     $scope.getHealth = function (level, character, tier) {
-      tier--;
 
-      level = (level > character.maxLevel[tier])
-            ? character.maxLevel[tier]
+      var i = tier - 1;
+
+      level = (level > character.maxLevel[i])
+            ? character.maxLevel[i]
             : level
             ;
 
-      return character.baseHealth[tier] + character.delHealth[tier] * (level--);
+      return character.baseHealth[i] + character.delHealth[i] * (level - 1);
     }
 
   });
