@@ -1,0 +1,172 @@
+<style type="text/css">
+  .character-container {
+    padding: 5px;
+  }
+
+
+  .character-container.ng-enter,
+  .character-container.ng-leave,
+  .character-container.ng-move {
+    -webkit-transition: 0.5s linear all;
+    -moz-transition: 0.5s linear all;
+    -o-transition: 0.5s linear all;
+    transition: 0.5s linear all;
+  }
+
+  .character-container.ng-enter,
+  .character-container.ng-move {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .character-container.ng-move.ng-move-active,
+  .character-container.ng-enter.ng-enter-active {
+    opacity: 1;
+    height: 120px;
+  }
+
+  .character-container.ng-leave {
+    opacity: 1;
+    overflow: hidden;
+  }
+
+  .character-container.ng-leave.ng-leave-active {
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+
+  .character {
+    border-width: 6px;
+    border-style: groove;
+    width: 100%;
+    height: 150px;
+    padding: 8px;
+  }
+  .legendary {
+    border-color: green;
+    background-color: green;
+  }
+  .epic {
+    border-color: red;
+    background-color: red;
+    /*background-color: rgba(240, 255, 255, 0.44);*/
+  }
+  .rare {
+    border-color: gold;
+    background-color: gold;
+  }
+  .uncommon {
+    border-color: silver;
+    background-color: silver;
+  }
+  .common {
+    border-color: brown;
+    background-color: brown;
+  }
+</style>
+
+<style type="text/css">
+  /*table > thead > tr > th { border-bottom: 0 !important; }*/
+  span.faction {
+    display: inline-block;
+    border-radius: 50%;
+    border: 1px solid grey;
+    height: 10px;
+    width: 10px;
+    vertical-align: middle;
+  }
+  .faction-red { background-color: #CC502A; }
+  .faction-white { background-color: #F6F0F0; }
+  .faction-blue { background-color: #399DB7; }
+  .faction-black { background-color: #443C47; }
+
+  .rarity-common {background-color: }
+  .rarity-uncommon {background-color: }
+  .rarity-rare {background-color: }
+  .rarity-epic {background-color: }
+  .rarity-legendary {background-color: }
+</style>
+
+<div class="input-group">
+  <input ng-model="search.name" class="form-control" type="text" placeholder="Search By Character Name...">
+  <span class="input-group-btn">
+    <button class="btn btn-default" ng-click="search.name = ''" type="button">Clear</button>
+  </span>
+</div>
+
+<br>
+
+<div>
+  <ul class="nav nav-tabs">
+    <li ng-class="{active: activeFilter == search}" ng-click="setActiveFilter('search'); currentPage = 0"><a>All Characters</a></li>
+    <li ng-class="{active: activeFilter == myListFilter}" ng-click="setActiveFilter('myListFilter'); currentPage = 0"><a>Compare</a></li>
+
+    <div class="pull-right" style="margin-top: 10px">
+      <span class="text-muted">Show: </span>
+      <div class="btn-group">
+        <button type="button" ng-click="showNum = 15" ng-class="{active: showNum == 15}" class="btn btn-default btn-xs">15</button>
+        <button type="button" ng-click="showNum = 30" ng-class="{active: showNum == 30}" class="btn btn-default btn-xs">30</button>
+        <button type="button" ng-click="showNum = 50" ng-class="{active: showNum == 50}" class="btn btn-default btn-xs">50</button>
+        <button type="button" ng-click="showNum = 100" ng-class="{active: showNum == 100}" class="btn btn-default btn-xs">100</button>
+      </div>
+    </div>
+  </ul>
+</div>
+
+<br>
+
+<div>
+  XP: <input type="number" min="1" max="85" ng-model="xp" ng-init="xp=1">
+
+  Tier:
+  <label><input type="radio" ng-model="tier" value="1" ng-init="tier=1"> I</label>
+  <label><input type="radio" ng-model="tier" value="2"> II</label>
+  <label><input type="radio" ng-model="tier" value="3"> III</label>
+  <label><input type="radio" ng-model="tier" value="4"> IV</label>
+</div>
+
+<br>
+
+<!-- charactersFiltered: {{ charactersFiltered.length }} -->
+
+<table class="table table-condensed table-hover">
+  <thead>
+    <th>&nbsp;
+    <th ng-click="predicate = 'name'">Name
+    <th ng-click="predicate = 'rarity'">Rarity
+    <th ng-click="predicate = 'speed'">Speed
+    <th>Faction(s)
+    <th>Power
+    <th>Health
+  
+  <tbody>
+
+    <tr bindonce="" ng-repeat="character in charactersFiltered = ( characters | filter:activeFilter | orderBy:predicate ) | startFrom:currentPage * showNum | limitTo:showNum">
+      <td><input type="checkbox" ng-model="character.inList">
+      <td bo-bind="character.name">
+      <td bo-bind="character.rarity">
+      <td bo-text="character.speed | speedToText">
+      <td>
+        <span class="faction faction-red" bo-if="character.factions.indexOf('Red') > -1"></span>
+        <span class="faction faction-blue" bo-if="character.factions.indexOf('Blue') > -1"></span>
+        <span class="faction faction-white" bo-if="character.factions.indexOf('White') > -1"></span>
+        <span class="faction faction-black" bo-if="character.factions.indexOf('Black') > -1"></span>
+      
+      <td ng-bind="getPower(xp, character, tier)">
+      <td ng-bind="getHealth(xp, character, tier)">
+    
+  
+</table>
+<ul class="pager">
+  <li class="previous" ng-class="{disabled: currentPage == 0}" ng-click="retreat()">
+    <a>&larr; Prev</a>
+  </li>
+  <li class="text-muted">{{ currentPage + 1 }} / {{ numberOfPages() }}</li>
+  <li class="next" ng-class="{disabled: currentPage == numberOfPages() - 1}" ng-click="advance()">
+    <a>Next &rarr;</a>
+  </li>
+</ul>
