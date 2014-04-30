@@ -180,8 +180,8 @@
         <span class="faction faction-black"
               bo-if="character.factions.indexOf('Black') > -1"></span>
       </td>
-      <td ng-bind="getPower(xp, character, tier)"></td>
-      <td ng-bind="getHealth(xp, character, tier)"></td>
+      <td ng-bind="character.getPower(xp, tier)"></td>
+      <td ng-bind="character.getHealth(xp, tier)"></td>
     </tr>
   </tbody>
 </table>

@@ -9,33 +9,35 @@ angular.module('hodaApp')
     }
   })
 
-  .filter('speedToText', function() {
-    var map = {
-      1: 'Slow',
-      2: 'Medium',
-      3: 'Quick'
-    };
-    return function (input) {
-      var out;
-      input = input || '';
-      out = (!map[input])
-          ? ''
-          : map[input]
-          ;
-      return out;
-    };
-  })
-
   .controller('CharactersCtrl', function ($scope, data) {
 
-    $scope.charactersFiltered;
+    $scope.characters = data;
 
-    $scope.characters = data.data;
+    //
+    // Search & Filters
+    //
 
+    $scope.search = {};
     $scope.predicate = 'name';
 
-    $scope.showNum = 15;
 
+    $scope.myListFilter = {
+      inList: true
+    };
+
+    $scope.activeFilter = $scope.search;
+
+    $scope.setActiveFilter = function (filter) {
+      if ($scope[filter]) {
+        $scope.activeFilter = $scope[filter];
+      }
+    };
+
+    //
+    // @todo(deck0): move pagination stuff into seperate module
+    //
+
+    $scope.showNum = 15;
     $scope.currentPage = 0;
 
     $scope.numberOfPages = function () {
@@ -55,45 +57,6 @@ angular.module('hodaApp')
         $scope.currentPage = $scope.currentPage - 1;
       }
     };
-
-    $scope.search = {};
-
-    $scope.myListFilter = {
-      inList: true
-    };
-
-    $scope.activeFilter = $scope.search;
-
-    $scope.setActiveFilter = function (filter) {
-      if ($scope[filter]) {
-        $scope.activeFilter = $scope[filter];
-      }
-    }
-
-    $scope.getPower = function (level, character, tier) {
-
-      var i = tier - 1;
-
-      level = (level > character.maxLevel[i])
-            ? character.maxLevel[i]
-            : level
-            ;
-
-      return character.basePower[i] + character.delPower[i] * (level - 1);
-    }
-
-    $scope.getHealth = function (level, character, tier) {
-
-      var i = tier - 1;
-
-      level = (level > character.maxLevel[i])
-            ? character.maxLevel[i]
-            : level
-            ;
-
-      return character.baseHealth[i] + character.delHealth[i] * (level - 1);
-    }
-
   });
 
 

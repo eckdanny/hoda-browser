@@ -3,7 +3,8 @@
 angular.module('hodaApp', [
   'ngRoute',
   'pasvaz.bindonce',
-  'ngAnimate'
+  'ngAnimate',
+  'hoda.characters'
 ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -15,9 +16,8 @@ angular.module('hodaApp', [
         templateUrl: 'views/characters.html',
         controller: 'CharactersCtrl',
         resolve: {
-          data: ['characterdata', function (characterdata) {
-            return characterdata.get();
-            // return 'hello world';
+          data: ['characters', function (characters) {
+            return characters.get();
           }]
         }
       })
